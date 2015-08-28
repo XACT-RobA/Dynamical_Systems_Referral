@@ -1,5 +1,6 @@
 from numpy import *
 import time
+import matplotlib.pyplot as plt
 
 start_time = time.time()
 
@@ -147,3 +148,31 @@ print('T^2 = (t^2 - ' + str(mean[2]) + ') / ' + str(stdev[2]))
 print('T^3 = (t^3 - ' + str(mean[3]) + ') / ' + str(stdev[3]))
 print('')
 print('time elapsed: ' + str(time.time() - start_time) + 's')
+
+dt = 0.001
+T = 0.2
+iters = int(T/dt)
+graph_x = [0.0] * iters
+graph_y = [0.0] * iters
+for i in range(iters):
+    current_t = dt*i
+    current_t_array = []
+    for j in range(t_wdth):
+        t0 = 1.0
+        t1 = current_t
+        t2 = current_t ** 2
+        t3 = current_t ** 3
+        current_t_array = [t0, t1, t2, t3]
+    for j in range(t_wdth):
+        if stdev[j] != 0:
+            current_t_array[j] = (current_t_array[j] - mean[j]) / stdev[j]
+        else:
+            current_t_array[j] = 1.0
+        graph_x[i] += current_t_array[j] * theta_x[j]
+        graph_y[i] += current_t_array[j] * theta_y[j]
+
+plt.plot(graph_x, graph_y)
+plt.title('Predicted x(t) against y(t) for t=0:0.2s')
+plt.xlabel('x(t)')
+plt.ylabel('y(t)')
+plt.show()
